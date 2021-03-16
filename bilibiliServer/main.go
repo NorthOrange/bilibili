@@ -1,10 +1,40 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"bilibiliServer/middleware"
+	"bilibiliServer/src/tools"
+	"log"
+	"os"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	// 初始化框架
+	// 配置文件解析
+	err := tools.ParseConfig("./config/config.json")
+	if err != nil {
+		log.Panicln(err)
+	}
+	// 资源存储文件夹创建
+	err = os.MkdirAll("./static/avatar", os.ModePerm)
+	if err != nil {
+		log.Panicln("avatar 文件夹创建失败")
+	}
+	err = os.MkdirAll("./static/video", os.ModePerm)
+	if err != nil {
+		log.Panicln("video 文件夹创建失败")
+	}
+
+	// 数据库初始化
+	err = tools.InitDb()
+	if err != nil {
+		log.Panicln(err)
+	}
+	// 框架初始化
 	r := gin.Default()
+	r.Use(middleware.Cors())
+	// 路由注册
+	r = CollectRoute(r)
 
 	r.Run(":11117")
 }
