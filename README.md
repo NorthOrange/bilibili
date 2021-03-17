@@ -10,7 +10,7 @@
 [vue](https://cn.vuejs.org/):一套构建用户界面的渐进式框架。 <br>
 [vant](https://youzan.github.io/vant/#/zh-CN/): 一个开源的移动端组件库。 <br>
 [axios](http://www.axios-js.com/): 一个易用、简洁且高效的http库。 <br>
-### 后端
+### [后端](./bilibiliServer)
 ###### golang
 [gin](https://github.com/gin-gonic/gin): 一个 go 语言编写的 web 框架。 <br>
 [gorm](https://gorm.io/zh_CN/): go 语言的 ORM 类库。 <br>
@@ -48,7 +48,16 @@ export default socket;
 - [ ] 用户详情页
   - [x] 基本资料展示
   - [ ] 视频列表展示
+- [ ] token 验证
 - [ ] 用户资料修改
   - [x] 头像修改
   - [x] 昵称、简介、性别修改
   - [ ] 密码修改
+- [x] 视频上传
+  - [x] 视频文件上传,后端转码存储
+  - [x] 视频标题自动填充与上传
+  - [x] 视频封面上传时预览, 没有上传封面后端自动抽取视频第一帧当封面
+- [ ] 首页
+  - [ ] 视频视频推荐页面
+    - [x] 视频播放时自动暂停其它视频
+    - [x] 视频超出可视范围自动暂停

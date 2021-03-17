@@ -14,11 +14,11 @@
 ###### 请求地址
 `POST /api/user/register`
 ###### 请求参数: application/json
-| 字段     | 类型   | 说明                       |
-| -------- | ------ | -------------------------- |
-| name     | string | 用户名, 2~7位字符          |
-| account  | string | 帐号, 6~11位纯数字         |
-| password | string | 密码, 6~11位字母数字下划线 |
+| 字段     | 类型   | 说明                       | 是否必选 |
+| -------- | ------ | -------------------------- | :------: |
+| name     | string | 用户名, 2~7位字符          |    y     |
+| account  | string | 帐号, 6~11位纯数字         |    y     |
+| password | string | 密码, 6~11位字母数字下划线 |    y     |
 
 ###### 成功返回: json
 | 字段  | 类型   | 说明                   |
@@ -32,12 +32,12 @@
 ###### 请求地址
 `POST /api/user/login`
 ###### 请求参数: application/json
-| 字段     | 类型   | 说明                       |
-| -------- | ------ | -------------------------- |
-| account  | string | 帐号, 6~11位纯数字         |
-| password | string | 密码, 6~11位字母数字下划线 |
-
-###### 成功返回: json
+| 字段     | 类型   | 说明                       | 是否必选 |
+| -------- | ------ | -------------------------- | :------: |
+| account  | string | 帐号, 6~11位纯数字         |    y     |
+| password | string | 密码, 6~11位字母数字下划线 |    y     |
+|          |
+###### 成功返回: application/json
 | 字段  | 类型   | 说明                   |
 | ----- | ------ | ---------------------- |
 | msg   | string | 提示信息               |
@@ -49,7 +49,7 @@
 ###### 请求地址
 `get /api/user/info/:id`
 
-###### 成功返回: json
+###### 成功返回: application/json
 | 字段         | 类型   | 说明           |
 | ------------ | ------ | -------------- |
 | account      | string | 用户帐号       |
@@ -66,11 +66,12 @@
 ###### 请求地址
 `post /api/avatar/upload`
 ###### 请求参数: multipart/form-data
-| 字段   | 类型 | 说明             |
-| ------ | ---- | ---------------- |
-| id     | uint | 用户id           |
-| avatar | file | 要上传的头像图片 |
-###### 成功返回: json
+| 字段   | 类型 | 说明             | 是否必选 |
+| ------ | ---- | ---------------- | :------: |
+| id     | uint | 用户id           |    y     |
+| avatar | file | 要上传的头像图片 |    y     |
+
+###### 成功返回: json 
 | 字段   | 类型   | 说明     |
 | ------ | ------ | -------- |
 | avatar | string | 用户头像 |
@@ -78,13 +79,50 @@
 ### 用户资料修改
 ###### 请求地址
 `post /api/user/mpdify/:id`
-###### 请求参数: json
-| 字段         | 类型   | 说明                       |
-| ------------ | ------ | -------------------------- |
-| name         | string | 用户要修改的昵称,可选      |
-| introduction | string | 用户要修改的个性签名, 可选 |
-| sex          | string | 用户要修改的性别, 可选     |
-###### 成功返回: json
+###### 请求参数: application/json
+| 字段         | 类型   | 说明                       | 是否必选 |
+| ------------ | ------ | -------------------------- | :------: |
+| name         | string | 用户要修改的昵称,可选      |    y     |
+| introduction | string | 用户要修改的个性签名, 可选 |    y     |
+| sex          | string | 用户要修改的性别, 可选     |    y     |
+###### 成功返回: application/json
 | 字段 | 类型   | 说明                       |
 | ---- | ------ | -------------------------- |
 | msg  | string | 根据修改结果返回的提示消息 |
+
+
+### 视频上传
+###### 请求地址
+`post /api/video/upload`
+###### 请求参数: multipart/form-data
+| 字段         | 类型   | 说明                            | 是否必选 |
+| ------------ | ------ | ------------------------------- | :------: |
+| video        | file   | 视频文件                        |    y     |
+| name         | string | 视频标题, 2~50个字符            |    y     |
+| introduction | string | 视频简介, 0~100个字符           |    y     |
+| cover        | file   | 视频封面,和 `nocover`字段取一个 |    n     |
+| nocover      | string | 没有封面上传时, 值应该为 "true" |    n     |
+###### 成功返回: json
+| 字段 | 类型   | 说明     |
+| ---- | ------ | -------- |
+| msg  | string | 提示消息 |
+
+
+### 视频信息获取
+###### 请求地址
+`get /api/video/get`
+
+###### 成功返回: application/json
+| 字段             | 类型   | 说明             |
+| ---------------- | ------ | ---------------- |
+| video            | string | 视频访问地址     |
+| videoid          | uint   | 视频id           |
+| introduction     | string | 视频简介         |
+| cover            | string | 视频封面访问地址 |
+| name             | string | 视频标题         |
+| likes            | uint   | 视频获赞数       |
+| dislikes         | uint   | 视频被踩数       |
+| fromid           | uint   | 视频发布者id     |
+| username         | string | 视频发布者昵称   |
+| avatar           | string | 用户头像         |
+| userintroduction | string | 用户简介         |

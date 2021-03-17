@@ -36,5 +36,6 @@ func main() {
 	// 路由注册
 	r = CollectRoute(r)
 
+	go tools.TransCodingVideo() // 视频转码服务
 	r.Run(":11117")
 }

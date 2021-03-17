@@ -41,7 +41,7 @@
       ></confirmBtn>
     </div>
   </div>
-</template>
+</template> 
 
 <script>
 import topBar from "../components/topBar.vue";
@@ -84,7 +84,7 @@ export default {
     this.UserVideoList();
   },
   watch: {
-    $router() {
+    $route() {
       this.UserVideoList();
       this.UserinfoData();
     },
