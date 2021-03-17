@@ -3,6 +3,7 @@ package controller
 import (
 	"bilibiliServer/src/model"
 	"bilibiliServer/src/tools"
+	"log"
 	"regexp"
 	"strconv"
 
@@ -55,11 +56,57 @@ func Login(c *gin.Context) { // 用户登录
 		if remoteUser.Password != localUser.Password {
 			c.JSON(401, gin.H{"msg": "密码错误!"})
 		} else {
-			token := tools.GetToken(strconv.Itoa(int(localUser.ID)))
+			token := tools.GetToken(strconv.Itoa(int(localUser.ID))) // 给登录成功的用户返回 id 和 token
 			c.JSON(200, gin.H{"msg": "登陆成功~", "id": localUser.ID, "token": token})
 		}
 	} else {
 		c.JSON(400, gin.H{"msg": "帐号不存在!"})
+	}
+}
+
+func UserInfo(c *gin.Context) { // 用户信息查询
+	id := c.Param("id")
+
+	log.Println("用户 " + id + " 进行了一次数据查询")
+	db := tools.GetDb()
+	var user model.User
+	db.Where("id = ?", id).First(&user)
+	c.JSON(200, gin.H{"name": user.Name, "following": user.Following, "followers": user.Followers, "likes": user.Likes, "introduction": user.Introduction, "account": user.Account, "avatar": tools.AvatarPath(user.Avatar), "sex": user.Sex})
+}
+
+func UserModify(c *gin.Context) { // 用户资料修改
+	id := c.Param("id")
+	log.Println("用户: ", id, " 正在修改资料")
+	var user model.User
+	c.BindJSON(&user)
+
+	db := tools.GetDb()
+	if user.Name != "" {
+		if b, _ := regexp.MatchString("^[^ ]{2,7}$", user.Name); !b {
+			c.JSON(400, gin.H{"msg": "昵称不符合规范!"})
+			return
+		} // 有用户名且符合规范, 修改用户名
+		db.Model(&user).Where("id = ?", id).Update("name", user.Name)
+		log.Println("用户", id, "修改用户名成功~")
+		c.JSON(200, gin.H{"msg": "用户名修改成功~"})
+	}
+	if user.Introduction != "" {
+		// 个性签名不为空, 修改个性签名
+		db.Model(user).Where("id = ?", id).Update("introduction", user.Introduction)
+		log.Println("用户", id, "修改签名成功~")
+
+		c.JSON(200, gin.H{"msg": "个性签名修改成功~"})
+	}
+	if user.Sex != "" {
+		if user.Sex != "男" && user.Sex != "女" {
+			c.JSON(400, gin.H{"msg": "性别不符合规范!"})
+			return
+		}
+		// 性别不为空且符合规范, 修改性别
+		db.Model(user).Where("id = ?", id).Update("sex", user.Sex)
+		log.Println("用户", id, "修改性别成功~")
+
+		c.JSON(200, gin.H{"msg": "性别修改成功~"})
 	}
 }
 

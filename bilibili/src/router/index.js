@@ -8,10 +8,16 @@ Vue.use(VueRouter);
 
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import userInfo from "../views/userInfo.vue";
+import Home from "../views/Home.vue";
+import usermodify from "../views/userModify.vue";
 
 const routes = [
   { path: "/login", component: Login },
   { path: "/register", component: Register },
+  { path: "/user/info/:id", component: userInfo },
+  { path: "/", component: Home },
+  { path: "/user/modify", component: usermodify },
 ];
 
 const router = new VueRouter({

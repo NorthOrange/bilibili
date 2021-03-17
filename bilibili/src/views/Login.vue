@@ -1,5 +1,7 @@
+<!-- 登录组件 -->
 <template>
   <div class="login">
+    <top-bar></top-bar>
     <div class="login_title">
       <div></div>
       <div>登录</div>
@@ -35,10 +37,11 @@
 </template>
 
 <script>
-import ConfirmButton from "../components/confirmButton.vue";
+import confirmButton from "../components/confirmButton.vue";
 import inputField from "../components/inputField.vue";
+import topBar from "../components/topBar";
 export default {
-  components: { inputField, ConfirmButton },
+  components: { inputField, confirmButton, topBar },
   data() {
     return {
       model: {

@@ -1,6 +1,5 @@
 import axios from "axios";
 import socket from "../config";
-import qs from "qs";
 import router from "../router";
 
 const request = axios.create({
@@ -9,7 +8,7 @@ const request = axios.create({
 });
 
 export default function({ methods = "get", url, data = {}, type = "json" }) {
-  if (methods == "get") {
+  if (methods == "get" || methods == "GET") {
     return request.get(url, data);
   }
   // json格式请求头
@@ -18,22 +17,19 @@ export default function({ methods = "get", url, data = {}, type = "json" }) {
   };
   // FormData格式请求头
   const headerFormData = {
-    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    "Content-Type": "multipart/form-data",
   };
-  return request.post(
-    url,
-    type == "json" ? JSON.stringify(data) : qs.stringify(data),
-    {
-      headers: type == "json" ? headerJSON : headerFormData,
-    }
-  );
+  return request.post(url, type == "json" ? JSON.stringify(data) : data, {
+    headers: type == "json" ? headerJSON : headerFormData,
+  });
 }
 
 // 拦截请求, 加上 token
 request.interceptors.request.use(
   function(config) {
     if (localStorage.getItem("token")) {
-      config.headers["token"] = localStorage.getItem("token");
+      config.headers["Authorization"] =
+        "Bearer " + localStorage.getItem("token");
     }
     return config;
   },

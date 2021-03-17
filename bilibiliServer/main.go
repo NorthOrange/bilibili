@@ -32,7 +32,7 @@ func main() {
 	}
 	// 框架初始化
 	r := gin.Default()
-	r.Use(middleware.Cors())
+	r.Use(middleware.Cors()) // 跨域解决
 	// 路由注册
 	r = CollectRoute(r)
 

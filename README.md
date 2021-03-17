@@ -19,7 +19,7 @@
 ### 其它
 ffmpeg: Fmpeg 是领先的多媒体框架，能够解码、编码、转码、混合、解密、流媒体、过滤和播放人类和机器创造的几乎所有东西。用来实现对用户上传的视频进行转码和封面抽取。<br>
 
-MySQL: 是最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL 是最好的 RDBMS(Relational Database Management System：关系数据库管理系统)应用软件之一。 <br>
+MySQL: 最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL 是最好的 RDBMS(Relational Database Management System：关系数据库管理系统)应用软件之一。 <br>
 
 
 ## 项目部署小提示
@@ -45,3 +45,10 @@ export default socket;
 ## 功能实现
 
 - [x] 注册、登录
+- [ ] 用户详情页
+  - [x] 基本资料展示
+  - [ ] 视频列表展示
+- [ ] 用户资料修改
+  - [x] 头像修改
+  - [x] 昵称、简介、性别修改
+  - [ ] 密码修改

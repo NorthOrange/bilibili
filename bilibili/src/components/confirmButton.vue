@@ -1,6 +1,10 @@
+<!-- 按钮 -->
 <template>
   <div class="btnparent">
-    <div class="confirmBtn" @click="confirmClick">{{ btnText }}</div>
+    <div
+      class="confirmBtn"
+      @click="confirmClick"
+    >{{ btnText }}</div>
   </div>
 </template>
 
@@ -20,7 +24,8 @@ export default {
   padding: 2.7vh 2.7vw;
 }
 .confirmBtn {
-  height: 7vh;
+  z-index: 999;
+  height: 6vh;
   background-color: #ff9db5;
   color: #f4f4f4;
   display: flex;

@@ -1,3 +1,5 @@
 bilibiliServer/bilibiliServer
 bilibiliServer/config/config.json
 bilibili/src/config.js
+/bilibiliServer/static/avatar/
+/bilibiliServer/static/video/

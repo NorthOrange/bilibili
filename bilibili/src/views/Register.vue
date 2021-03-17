@@ -1,5 +1,7 @@
+<!-- 注册组件 -->
 <template>
   <div class="register">
+    <top-bar></top-bar>
     <div class="register_title">
       <div></div>
       <div>注册</div>
@@ -11,14 +13,14 @@
         placeholder="请输入2~7位非空字符）"
         type="text"
         maxlength="7"
-        @filedInput="(res) => (model.name = res)"
+        @filedInput="res => (model.name = res)"
       ></inputField>
       <inputField
         label="帐号"
         placeholder="请输入6-11纯位数字"
         type="text"
         maxlength="11"
-        @filedInput="(res) => (model.account = res)"
+        @filedInput="res => (model.account = res)"
       >
       </inputField>
       <inputField
@@ -26,7 +28,7 @@
         placeholder="请输入6-11位，可含有数字字母_-）"
         type="password"
         maxlength="11"
-        @filedInput="(res) => (model.password = res)"
+        @filedInput="res => (model.password = res)"
       >
       </inputField>
       <confirm-button
@@ -42,10 +44,12 @@
 </template>
 
 <script>
-import ConfirmButton from "../components/confirmButton.vue";
+import confirmButton from "../components/confirmButton.vue";
 import inputField from "../components/inputField.vue";
+import topBar from "../components/topBar";
+
 export default {
-  components: { inputField, ConfirmButton },
+  components: { inputField, confirmButton, topBar },
   data() {
     return {
       model: {

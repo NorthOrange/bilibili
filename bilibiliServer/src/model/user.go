@@ -10,10 +10,10 @@ type User struct {
 	Password     string `gorm:"type:varchar(11);not null" json:"password"`
 	Avatar       string `gorm:"type:varchar(20);" json:"avatar"` // 用户头像地址
 	Sex          string `gorm:"type:varchar(1)" json:"sex"`
-	Followers    uint   `json:"followers"`    // 用户粉丝数
-	Following    uint   `json:"following"`    // 用户关注数
-	Likes        uint   `json:"likes"`        // 用户视频获赞数
-	Introduction string `json:"introduction"` // 个人简介
+	Followers    uint   `json:"followers"`                            // 用户粉丝数
+	Following    uint   `json:"following"`                            // 用户关注数
+	Likes        uint   `json:"likes"`                                // 用户视频获赞数
+	Introduction string `gorm:"type:varchar(30)" json:"introduction"` // 个人简介
 }
 
 func (User) TableName() string {
