@@ -14,6 +14,13 @@ import (
 
 func UploadAvatar(c *gin.Context) { // 用户头像上传
 	id := c.PostForm("id")
+	if tokenid, b := c.Get("tokenid"); b {
+		if id != tokenid {
+			c.JSON(403, gin.H{"msg": "你没有权限!"})
+			log.Println("行为发起用户的id为: ", id, " 但是对应 token : ", tokenid)
+			return
+		}
+	}
 	log.Println("用户: ", id, " 正在上传头像")
 
 	file, err := c.FormFile("avatar")

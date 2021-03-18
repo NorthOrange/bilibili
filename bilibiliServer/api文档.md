@@ -20,7 +20,7 @@
 | account  | string | 帐号, 6~11位纯数字         |    y     |
 | password | string | 密码, 6~11位字母数字下划线 |    y     |
 
-###### 成功返回: json
+###### 成功返回: application/json
 | 字段  | 类型   | 说明                   |
 | ----- | ------ | ---------------------- |
 | msg   | string | 提示信息               |
@@ -52,6 +52,7 @@
 ###### 成功返回: application/json
 | 字段         | 类型   | 说明           |
 | ------------ | ------ | -------------- |
+| id           | uint   | 用户id         |
 | account      | string | 用户帐号       |
 | name         | string | 用户昵称       |
 | introduction | string | 用户个人简介   |
@@ -66,12 +67,14 @@
 ###### 请求地址
 `post /api/avatar/upload`
 ###### 请求参数: multipart/form-data
+###### 需在请求头中添加上: `"Authorization": "Bearer token"`
+
 | 字段   | 类型 | 说明             | 是否必选 |
 | ------ | ---- | ---------------- | :------: |
 | id     | uint | 用户id           |    y     |
 | avatar | file | 要上传的头像图片 |    y     |
 
-###### 成功返回: json 
+###### 成功返回: application/json
 | 字段   | 类型   | 说明     |
 | ------ | ------ | -------- |
 | avatar | string | 用户头像 |
@@ -80,6 +83,7 @@
 ###### 请求地址
 `post /api/user/mpdify/:id`
 ###### 请求参数: application/json
+###### 需在请求头中添加上: `"Authorization": "Bearer token"`
 | 字段         | 类型   | 说明                       | 是否必选 |
 | ------------ | ------ | -------------------------- | :------: |
 | name         | string | 用户要修改的昵称,可选      |    y     |
@@ -95,6 +99,8 @@
 ###### 请求地址
 `post /api/video/upload`
 ###### 请求参数: multipart/form-data
+###### 需在请求头中添加上: `"Authorization": "Bearer token"`
+
 | 字段         | 类型   | 说明                            | 是否必选 |
 | ------------ | ------ | ------------------------------- | :------: |
 | video        | file   | 视频文件                        |    y     |
@@ -102,13 +108,13 @@
 | introduction | string | 视频简介, 0~100个字符           |    y     |
 | cover        | file   | 视频封面,和 `nocover`字段取一个 |    n     |
 | nocover      | string | 没有封面上传时, 值应该为 "true" |    n     |
-###### 成功返回: json
+###### 成功返回: application/json
 | 字段 | 类型   | 说明     |
 | ---- | ------ | -------- |
 | msg  | string | 提示消息 |
 
 
-### 视频信息获取
+### 视频信息查询
 ###### 请求地址
 `get /api/video/get`
 
@@ -126,3 +132,75 @@
 | username         | string | 视频发布者昵称   |
 | avatar           | string | 用户头像         |
 | userintroduction | string | 用户简介         |
+
+
+### 用户视频列表信息查询
+###### 请求地址
+`get /api/user/video/list/:id`
+
+###### 成功返回: application/json
+| 字段      | 类型       | 说明         |
+| --------- | ---------- | ------------ |
+| namelist  | string数组 | 视频名字列表 |
+| coverlist | string数组 | 视频封面列表 |
+| idlist    | int数组    | 视频id列表   |
+
+### 用户之间关系查询
+###### 请求地址
+`get /api/live/follow/query`
+###### 请求参数: application/json
+| 字段   | 类型   | 说明         | 是否必选 |
+| ------ | ------ | ------------ | :------: |
+| fromid | number | 关系发起者id |    y     |
+| toid   | number | 关系接收者id |    y     |
+###### 成功返回: application/json
+| 字段         | 类型 | 说明                             |
+| ------------ | ---- | -------------------------------- |
+| followstatus | int  | 用户之间关系, 0为没关注, 1为关注 |
+
+
+### 用户之间关系修改
+###### 请求地址
+`post /api/live/follow`
+###### 请求参数: application/json
+###### 需在请求头中添加上: `"Authorization": "Bearer token"`
+
+| 字段          | 类型   | 说明                                 | 是否必选 |
+| ------------- | ------ | ------------------------------------ | :------: |
+| fromid        | number | 关注发起者id                         |    y     |
+| toid          | number | 被关注者id                           |    y     |
+| folloewstatus | number | 想要设置的关系, 1为关注, 0为取消关注 |    y     |
+###### 成功返回: application/json
+| 字段 | 类型   | 说明     |
+| ---- | ------ | -------- |
+| msg  | string | 提示信息 |
+
+
+### 用户和视频之间关系查询
+###### 请求地址
+`get /api/live/like/query`
+###### 请求参数: application/json
+| 字段    | 类型   | 说明   | 是否必选 |
+| ------- | ------ | ------ | :------: |
+| videoid | number | 视频id |    y     |
+| userid  | number | 用户id |    y     |
+###### 成功返回: application/json
+| 字段       | 类型 | 说明                                            |
+| ---------- | ---- | ----------------------------------------------- |
+| likestatus | int  | 用户和视频之间关系, 0 为无关系,1为点赞,-1为点踩 |
+
+
+### 用户和视频之间关系修改
+###### 请求地址
+`get /api/live/like`
+###### 请求参数: application/json
+| 字段       | 类型   | 说明                                             | 是否必选 |
+| ---------- | ------ | ------------------------------------------------ | :------: |
+| videoid    | number | 视频id                                           |    y     |
+| userid     | number | 用户id                                           |    y     |
+| likestatus | number | 用户和视频之间的关系,0 为无关系,1为点赞,-1为点踩 |    y     |
+###### 成功返回: application/json
+| 字段       | 类型   | 说明                                                    |
+| ---------- | ------ | ------------------------------------------------------- |
+| msg        | string | 提示信息                                                |
+| likestatus | int    | 更新后的用户和视频之间关系, 0 为无关系,1为点赞,-1为点踩 |

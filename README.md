@@ -10,6 +10,7 @@
 [vue](https://cn.vuejs.org/):一套构建用户界面的渐进式框架。 <br>
 [vant](https://youzan.github.io/vant/#/zh-CN/): 一个开源的移动端组件库。 <br>
 [axios](http://www.axios-js.com/): 一个易用、简洁且高效的http库。 <br>
+[font-awesome](https://fontawesome.dashgame.com/)Font Awesome为您提供可缩放的矢量图标，您可以使用CSS所提供的所有特性对它们进行更改，包括：大小、颜色、阴影或者其它任何支持的效果。 <br>
 ### [后端](./bilibiliServer)
 ###### golang
 [gin](https://github.com/gin-gonic/gin): 一个 go 语言编写的 web 框架。 <br>
@@ -24,7 +25,7 @@ MySQL: 最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL �
 
 ## 项目部署小提示
 你应该添加两个这样的文件: <br>
-`./bilibiliServer//config/app.json`:
+`./bilibiliServer/config/config.json`:
 
 ```
 {
@@ -47,7 +48,8 @@ export default socket;
 - [x] 注册、登录
 - [ ] 用户详情页
   - [x] 基本资料展示
-  - [ ] 视频列表展示
+  - [x] 视频列表展示
+  - [ ] 动态列表展示
 - [ ] token 验证
 - [ ] 用户资料修改
   - [x] 头像修改
@@ -61,3 +63,6 @@ export default socket;
   - [ ] 视频视频推荐页面
     - [x] 视频播放时自动暂停其它视频
     - [x] 视频超出可视范围自动暂停
+- [ ] 动态
+  - [x] 用户之间关注
+  - [x] 用户给视频点赞、点踩

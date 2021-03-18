@@ -74,11 +74,7 @@ export default {
     },
     play(event) {
       // 视频播放时, 暂停其它视频
-      console.log(
-        // event.target.getBoundingClientRect(),
-        pageYOffset,
-        event.target.parentNode.parentNode.getBoundingClientRect()
-      );
+
       if (this.onPlayVideo == "") {
         this.onPlayVideo = event.target;
         return;
@@ -94,7 +90,7 @@ export default {
         return;
       } else {
         var p = this.onPlayVideo.parentNode.parentNode.getBoundingClientRect(); // 获取这个元素的位置
-        if (p.top < -1600 || p.bottom > 1600) {
+        if (p.top < -600 || p.bottom > 1600) {
           // 当元素超出可视范围停止播放
           this.onPlayVideo.pause();
         }

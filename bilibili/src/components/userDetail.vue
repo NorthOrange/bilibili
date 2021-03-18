@@ -38,8 +38,10 @@
           v-else
           class="button"
           style="color: #fff; background-color: #fb7299"
+          @click="follow"
         >
-          不编辑资料
+          <div v-if="isFollow==1">已关注</div>
+          <div v-else>关注</div>
         </div>
       </div>
     </div>
@@ -72,10 +74,71 @@ export default {
   data() {
     return {
       localId: "",
+      isFollow: 0,
+      followStatusChange: false, // 判断关注状态是否改变
+      timer: 0,
     };
   },
-  beforeMount() {
-    this.localId = localStorage.getItem("id");
+  methods: {
+    follow() {
+      // 点击关注触发一个定时函数, 确保不会频繁上传
+      this.followStatusChange = !this.followStatusChange;
+      if (this.isFollow == 0) {
+        // 没关注就关注, 已关注就取消关注
+        this.isFollow = 1;
+      } else {
+        this.isFollow = 0;
+      }
+
+      console.log("触发点击事件", this.isFollow);
+      if (this.timer != 0) {
+        // 如果1秒内已经点击过了, 清除上一次点击触发的函数
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        if (this.followStatusChange) {
+          // 判断关注状态有没有变化
+          this.$request({
+            methods: "post",
+            url: "/api/live/follow",
+            data: {
+              fromid: parseInt(this.localId),
+              toid: parseInt(this.userinfo.id),
+              followstatus: parseInt(this.isFollow),
+            },
+            type: "json",
+          }).then(() => {
+            this.timer = 0;
+          });
+        } else {
+          this.timer = 0;
+          return;
+        }
+      }, 1000);
+    },
+  },
+  created() {
+    this.localId = localStorage.getItem("id"); // 获取本地缓存的 id , 判断是否进入了登录用户的中心页
+  },
+  watch: {
+    userinfo(n, o) {
+      this.userinfo = n;
+      console.log(o, n.id);
+      if (this.localId != this.userinfo.id) {
+        // 当登录用户进入其他用户页面, 请求关注状态
+        this.$request({
+          methods: "post",
+          url: "/api/live/follow/query",
+          data: {
+            fromid: parseInt(this.localId),
+            toid: parseInt(n.id),
+          },
+          type: "json",
+        }).then((response) => {
+          this.isFollow = response.data.followstatus;
+        });
+      }
+    },
   },
 };
 </script>

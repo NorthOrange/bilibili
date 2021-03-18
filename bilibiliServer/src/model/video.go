@@ -17,3 +17,15 @@ type Video struct {
 func (Video) TableName() string {
 	return "videos"
 }
+
+// 用户与视频关系表
+type VideoLike struct {
+	gorm.Model
+	VideoId    uint `json:"videoid"`
+	UserId     uint `json:"userid"`
+	LikeStatus int  `json:"likestatus"`
+}
+
+func (VideoLike) TableName() string {
+	return "videolikes"
+}

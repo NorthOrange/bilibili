@@ -25,19 +25,53 @@
         :poster="model.cover"
       ></video>
       <span class="videoLike">
-        <span id="like">
+        <span
+          id="like"
+          style="color: #fb7299;"
+          v-show="videoLikeStatus==1"
+          @click="likeClick"
+        >
+          <i
+            class="fa fa-thumbs-up"
+            aria-hidden="true"
+          ></i>
+          {{ model.likes + isLike }}
+        </span>
+        <span
+          id="like"
+          style="color: gray;"
+          v-show="videoLikeStatus==0||videoLikeStatus==-1"
+          @click="likeClick"
+        >
           <i
             class="fa fa-thumbs-o-up"
             aria-hidden="true"
           ></i>
-          {{ model.likes }}
+          {{ model.likes + isLike }}
         </span>
-        <span id="dislike">
+        <span
+          id="dislike"
+          style="color: #fb7299;"
+          v-show="videoLikeStatus==-1"
+          @click="dislikeClick"
+        >
+          <i
+            class="fa fa-thumbs-down"
+            aria-hidden="true"
+          ></i>
+          {{ model.dislike + isDislike }}
+        </span>
+        <span
+          id="dislike"
+          style="color: gray;"
+          v-show="videoLikeStatus==1||videoLikeStatus==0"
+          @click="dislikeClick"
+        >
           <i
             class="fa fa-thumbs-o-down"
             aria-hidden="true"
           ></i>
-          {{ model.dislike }}
+          {{ model.dislike  + isDislike}}
         </span>
       </span>
     </div>
@@ -50,65 +84,36 @@ export default {
   data() {
     return {
       model: {},
+      videoLikeStatus: 0,
+      originVideoLikeStatus: 0,
+      isLike: 0,
+      isDislike: 0,
+      timer: 0,
     };
   },
   created() {
+    // 获取视频信息
     this.$request({
       methods: "get",
       url: "/api/video/get",
     }).then((response) => {
       this.model = response.data;
+      this.$request({
+        // 根据视频信息, 获取用户和视频的关系
+        methods: "post",
+        url: "/api/live/like/query",
+        data: {
+          videoid: parseInt(this.model.videoid),
+          userid: parseInt(localStorage.getItem("id")),
+        },
+        type: "json",
+      }).then((response) => {
+        this.videoLikeStatus = response.data.likestatus;
+        this.OriginVideoLikeStatus = response.data.likestatus;
+      });
     });
   },
-  beforeMount() {
-    //     this.$request(
-    //       "post",
-    //       "/api/relation/video/retrieve",
-    //       {
-    //         videoid: this.model.videoid,
-    //         userid: localStorage.getItem("id"),
-    //       },
-    //       "json"
-    //     ).then((res) => {
-    //       if (res.data.relation == 0) {
-    //         this.isLike = false;
-    //         this.isDislike = true;
-    //         this.remoteRelation = 0;
-    //       } else {
-    //         this.isLike = true;
-    //         this.isDislike = false;
-    //         this.remoteRelation = 1;
-    //       }
-    //     });
-    //   },
-    //   watch: {
-    //     isLike() {
-    //       // 监听属性, 改变按钮颜色
-    //       const likeDom = document.getElementById("like");
-    //       const dislikeDom = document.getElementById("dislike");
-    //       if (this.isLike) {
-    //         likeDom.style.color = " red";
-    //         dislikeDom.style.color = "gray";
-    //         this.model.likes += 1;
-    //       } else {
-    //         likeDom.style.color = "gray";
-    //         this.model.likes -= 1;
-    //       }
-    //     },
-    //     isDislike() {
-    //       // 监听属性, 改变按钮颜色
-    //       const likeDom = document.getElementById("like");
-    //       const dislikeDom = document.getElementById("dislike");
-    //       if (this.isDislike) {
-    //         dislikeDom.style.color = "red";
-    //         likeDom.style.color = "gray";
-    //         this.model.dislike += 1;
-    //       } else {
-    //         dislikeDom.style.color = "gray";
-    //         this.model.dislike -= 1;
-    //       }
-    //     },
-  },
+
   methods: {
     goUserInfo() {
       this.$router.push("/user/info/" + this.model.fromid);
@@ -117,12 +122,78 @@ export default {
       // 点击播放视频, 将对象传出去
       this.$emit("play", event);
     },
-    // likeClick() {
-    //   this.isLike = !this.isLike;
-    // },
-    // dislikeClick() {
-    //   this.isDislike = !this.isDislike;
-    // },
+    likeClick() {
+      console.log("likeClick");
+      if (this.videoLikeStatus == 1) {
+        this.videoLikeStatus = 0;
+        this.isLike = 0;
+      } else {
+        this.videoLikeStatus = 1;
+        this.isLike = 1;
+        this.isDislike = 0;
+      }
+      if (this.timer != 0) {
+        clearTimeout(this.timer); // 拦截重复点击
+      }
+
+      this.timer = setTimeout(() => {
+        if (this.videoLikeStatus != this.OriginVideoLikeStatus) {
+          // 状态发生变化
+          this.$request({
+            methods: "post",
+            url: "/api/live/like",
+            data: {
+              videoid: parseInt(this.model.videoid),
+              userid: parseInt(localStorage.getItem("id")),
+              likestatus: parseInt(this.videoLikeStatus),
+            },
+            type: "json",
+          }).then((res) => {
+            this.originVideoLikeStatus = res.data.videolikestatus;
+            this.timer = 0;
+          });
+        } else {
+          this.timer = 0;
+          return;
+        }
+      }, 1000);
+    },
+    dislikeClick() {
+      console.log("dislikeClick");
+      if (this.videoLikeStatus == -1) {
+        this.videoLikeStatus = 0;
+        this.isDislike = 0;
+      } else {
+        this.videoLikeStatus = -1;
+        this.isDislike = 1;
+        this.isLike = 0;
+      }
+      if (this.timer != 0) {
+        clearTimeout(this.timer); // 拦截重复点击
+      }
+
+      this.timer = setTimeout(() => {
+        if (this.videoLikeStatus != this.OriginVideoLikeStatus) {
+          // 状态发生变化
+          this.$request({
+            methods: "post",
+            url: "/api/live/like",
+            data: {
+              videoid: parseInt(this.model.videoid),
+              userid: parseInt(localStorage.getItem("id")),
+              likestatus: parseInt(this.videoLikeStatus),
+            },
+            type: "json",
+          }).then((response) => {
+            this.originVideoLikeStatus = response.data.videolikestatus;
+            this.timer = 0;
+          });
+        } else {
+          this.timer = 0;
+          return;
+        }
+      }, 1000);
+    },
   },
 };
 </script>

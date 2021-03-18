@@ -1,8 +1,9 @@
 package main
 
 import (
-	"bilibiliServer/middleware"
+	"bilibiliServer/src/middleware"
 	"bilibiliServer/src/tools"
+	"io"
 	"log"
 	"os"
 
@@ -24,6 +25,9 @@ func main() {
 	if err != nil {
 		log.Panicln("video 文件夹创建失败")
 	}
+	// 日志文件创建
+	logFile, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(logFile, os.Stdout)
 
 	// 数据库初始化
 	err = tools.InitDb()

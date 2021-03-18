@@ -20,9 +20,12 @@ func (User) TableName() string {
 	return "users"
 }
 
+// 用户之间关系表
 type UserFollow struct {
-	Fromid uint `json:"fromid"`
-	Toid   uint `json:"toid"`
+	gorm.Model
+	FromId       uint `json:"fromid"`
+	ToId         uint `json:"toid"`
+	FollowStatus int  `json:"followstatus"`
 }
 
 func (UserFollow) TableName() string {

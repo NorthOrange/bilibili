@@ -16,6 +16,13 @@ func VideoUpload(c *gin.Context) {
 	// 获取上传信息
 	var video model.Video
 
+	if tokenid, b := c.Get("tokenid"); b {
+		if id := c.PostForm("id"); id != tokenid {
+			c.JSON(403, gin.H{"msg": "你没有权限!"})
+			log.Println("行为发起用户的id为: ", id, " 但是对应 token : ", tokenid)
+			return
+		}
+	}
 	// 发布者 id
 	fromid, _ := strconv.Atoi(c.PostForm("id"))
 	video.FromId = uint(fromid)

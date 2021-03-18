@@ -55,6 +55,7 @@ export default {
       active: 0,
       videoNameList: [],
       videoCoverList: [],
+      videoIdList: [],
     };
   },
   components: { UserDetail, topBar, confirmBtn },
@@ -66,16 +67,16 @@ export default {
         url: "/api/user/info/" + this.$route.params.id,
       }).then((res) => {
         this.model = res.data;
-        this.model.id = this.$route.params.id;
       });
     },
     UserVideoList() {
       this.$request({
         methods: "get",
-        url: "/api/user/video/list" + this.$route.params.id,
+        url: "/api/user/video/list/" + this.$route.params.id,
       }).then((res) => {
         this.videoNameList = res.data.namelist;
         this.videoCoverList = res.data.coverlist;
+        this.videoIdList = res.data.idlist;
       });
     },
   },
@@ -85,8 +86,8 @@ export default {
   },
   watch: {
     $route() {
-      this.UserVideoList();
       this.UserinfoData();
+      this.UserVideoList();
     },
   },
 };

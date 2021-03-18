@@ -45,6 +45,7 @@ request.interceptors.response.use(
   },
   function(err) {
     if (err.response.status == 403) {
+      localStorage.clear();
       router.push("/login");
     }
     return Promise.reject(err);

@@ -15,7 +15,10 @@ func Register(c *gin.Context) { // 用户注册控制
 	db := tools.GetDb()
 
 	var user model.User
-	c.BindJSON(&user)
+	err := c.BindJSON(&user)
+	if err != nil {
+		log.Panicln("数据解析错误: ", err)
+	}
 	if b, _ := regexp.MatchString("^[^ ]{2,7}$", user.Name); !b {
 		c.JSON(400, gin.H{"msg": "昵称不符合规范!"})
 		return
@@ -40,7 +43,10 @@ func Register(c *gin.Context) { // 用户注册控制
 func Login(c *gin.Context) { // 用户登录
 	db := tools.GetDb()
 	var remoteUser model.User
-	c.BindJSON(&remoteUser)
+	err := c.BindJSON(&remoteUser)
+	if err != nil {
+		log.Panicln("数据解析错误: ", err)
+	}
 	if b, _ := regexp.MatchString("^[0-9]{6,11}$", remoteUser.Account); !b {
 		c.JSON(400, gin.H{"msg": "用户名不规范"})
 		return
@@ -71,11 +77,18 @@ func UserInfo(c *gin.Context) { // 用户信息查询
 	db := tools.GetDb()
 	var user model.User
 	db.Where("id = ?", id).First(&user)
-	c.JSON(200, gin.H{"name": user.Name, "following": user.Following, "followers": user.Followers, "likes": user.Likes, "introduction": user.Introduction, "account": user.Account, "avatar": tools.AvatarPath(user.Avatar), "sex": user.Sex})
+	c.JSON(200, gin.H{"id": id, "name": user.Name, "following": user.Following, "followers": user.Followers, "likes": user.Likes, "introduction": user.Introduction, "account": user.Account, "avatar": tools.AvatarPath(user.Avatar), "sex": user.Sex})
 }
 
 func UserModify(c *gin.Context) { // 用户资料修改
 	id := c.Param("id")
+	if tokenid, b := c.Get("tokenid"); b {
+		if id != tokenid {
+			c.JSON(403, gin.H{"msg": "你没有权限!"})
+			log.Println("行为发起用户的id为: ", id, " 但是对应 token : ", tokenid)
+			return
+		}
+	}
 	log.Println("用户: ", id, " 正在修改资料")
 	var user model.User
 	c.BindJSON(&user)
