@@ -182,10 +182,16 @@ export default {
       }
       // 上传
       var loading = this.$msg.loading({
-        durations: 1000,
+        durations: 4000,
         msg: "加载中...",
         forbidClick: true,
       });
+      setTimeout(() => {
+        this.$router.push("/");
+        this.$msg.fail(
+          "视频已经在后台偷偷上传了,在看到上传成功之前不要离开哦~"
+        );
+      }, 4000);
       this.$request({
         methods: "post",
         url: "/api/video/upload",
@@ -196,9 +202,6 @@ export default {
           if (res.status == 200) {
             loading.clear();
             this.$msg.success(res.data["msg"]);
-            setTimeout(() => {
-              this.$router.push("/user/info/" + localStorage.getItem("id"));
-            }, 1000);
           }
         })
         .catch((err) => {
@@ -207,7 +210,7 @@ export default {
             this.$msg.error(err.response.data["msg"]);
           } else {
             loading.clear();
-            this.$msg.error("遇到了预期之外的错误,请检查你的网络");
+            this.$msg.fail("遇到了预期之外的错误,请检查你的网络");
           }
         });
     },
