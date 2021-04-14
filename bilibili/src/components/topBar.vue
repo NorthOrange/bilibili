@@ -10,11 +10,12 @@
         alt=""
       />
     </div>
-    <van-search
+    <!-- <van-search
       background="#f6869c"
       disabled
       placeholder="请输入搜索关键词"
-    />
+    /> -->
+    <div style="background-color:#f6869c"></div>
     <div
       @click="goUserInfo"
       v-if="avatar_url"

@@ -40,7 +40,9 @@
         @confirmClick="$router.push('/video/upload')"
       ></confirmBtn>
     </div>
+
   </div>
+
 </template> 
 
 <script>

@@ -46,7 +46,10 @@
       </div>
     </div>
     <div>
-      <h2>{{ userinfo.name }}</h2>
+      <h2>{{ userinfo.name }} <span
+          id="signout"
+          @click="signout"
+        >退出登录</span> </h2>
       <p
         class="introduction"
         v-if="userinfo.introduction"
@@ -57,12 +60,6 @@
         class="introduction"
         v-else
       >这个人很懒, 什么都没有写</p>
-    </div>
-    <div
-      class=""
-      v-if="localId==userinfo.id"
-    >
-
     </div>
 
   </div>
@@ -80,6 +77,21 @@ export default {
     };
   },
   methods: {
+    signout() {
+      this.$Dialog
+        .confirm({
+          title: "",
+          confirmButtonColor: "#f6869c",
+          message: "确定要退出登录吗?",
+        })
+        .then(() => {
+          localStorage.clear();
+          this.$router.push("/");
+        })
+        .catch(() => {
+          return;
+        });
+    },
     follow() {
       // 点击关注触发一个定时函数, 确保不会频繁上传
       this.followStatusChange = !this.followStatusChange;
@@ -200,6 +212,14 @@ export default {
   }
   .introduction {
     color: #aaa;
+  }
+  #signout {
+    float: right;
+
+    font-size: 4vw;
+    color: #fb7a9f;
+    border: 2px solid #fb7a9f;
+    border-radius: 1vw;
   }
 }
 </style>

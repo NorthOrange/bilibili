@@ -17,6 +17,9 @@ Vue.use(Vant);
 import { Toast } from "vant";
 Vue.prototype.$msg = Toast;
 
+import { Dialog } from "vant";
+Vue.prototype.$Dialog = Dialog;
+
 new Vue({
   router,
   render: (h) => h(App),
