@@ -31,7 +31,7 @@
       @click="$router.push('/login')"
       v-else
     >
-      登陆
+      登录
     </div>
   </div>
 </template>

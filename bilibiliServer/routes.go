@@ -15,13 +15,16 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 
 	r.POST("/api/video/upload" /* middleware.JWTAuth(), */, controller.VideoUpload) // 视频上传
 	r.GET("/api/video/get", controller.VideoGet)                                    // 视频访问
-	r.GET("/api/user/video/list/:id", controller.VideoListGet)                      // 用户发布的视频列表
+	r.GET("/api/user/video/list/:id", controller.VideoListGet)
+	r.GET("/api/video/:id") // 用户发布的视频列表
 
 	r.POST("/api/live/follow/query", controller.FollowQuery)                  // 两个用户之间关系查询
 	r.POST("/api/live/follow" /* middleware.JWTAuth(), */, controller.Follow) // 用户之间关系修改
 
 	r.POST("/api/live/like/query", controller.LikeQuery)                  //视频和用户之间关系查询
 	r.POST("/api/live/like" /* middleware.JWTAuth(), */, controller.Like) // 视频和用户之间关系修改
+
+	r.POST("/api/snedSMS", controller.SendSMS) // 发短信接口
 
 	r.Static("/avatar", "./static/avatar/")
 	r.Static("/video", "./static/video/")

@@ -58,8 +58,8 @@ MySQL: 最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL �
 {
     "DbUsername": "user name",
     "DbPassword": "user password",
-    "DbName": "database name"
-    "socket: "http://127.0.0.1:11117"
+    "DbName": "database name",
+    "socket": "http://127.0.0.1:11117"
 }
 ```
 

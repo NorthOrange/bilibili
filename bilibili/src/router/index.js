@@ -12,11 +12,14 @@ import userInfo from "../views/userInfo.vue";
 import Home from "../views/Home.vue";
 import usermodify from "../views/userModify.vue";
 import videoUpload from "../views/videoUpload";
+import videoPlayer from "../views/videoPlayer"
 
 const routes = [
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   { path: "/user/info/:id", component: userInfo },
+  { path: "/video/info/:id", component: videoPlayer },
+
   { path: "/", component: Home },
   { path: "/user/modify", component: usermodify },
   { path: "/video/upload", component: videoUpload },

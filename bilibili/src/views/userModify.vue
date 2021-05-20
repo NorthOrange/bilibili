@@ -47,11 +47,11 @@
         />
       </van-dialog>
 
-      <edit-bar left="帐号">
+      <edit-bar left="手机号">
         <a
           href="javascript:;"
           slot="right"
-        >{{ model.account }}</a>
+        >{{ model.mobile }}</a>
       </edit-bar>
 
       <edit-bar

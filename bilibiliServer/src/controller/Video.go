@@ -27,6 +27,30 @@ func VideoGet(c *gin.Context) { // 随机返回一个视频
 		"username":         user.Name,
 		"avatar":           tools.AvatarPath(user.Avatar),
 		"userintroduction": user.Introduction,
+		"comments":         video.Comments,
+	})
+}
+
+func VideoGetById(c *gin.Context) { // 根据 id 获取视频
+	db := tools.GetDb()
+	var video model.Video
+	var user model.User
+	db.Where("id = ?", c.Param("id")).Find(&video)
+	log.Println(video.Name + "被请求了")
+	db.Model(&user).Where("id = ?", video.FromId).Find(&user)
+	c.JSON(200, gin.H{
+		"videoid":          video.ID,
+		"name":             video.Name,
+		"introduction":     video.Introduction,
+		"video":            tools.VideoPath(video.Path),
+		"likes":            video.Likes,
+		"dislike":          video.Dislikes,
+		"cover":            tools.VideoPath(video.Cover),
+		"fromid":           video.FromId,
+		"username":         user.Name,
+		"avatar":           tools.AvatarPath(user.Avatar),
+		"userintroduction": user.Introduction,
+		"comments":         video.Comments,
 	})
 }
 

@@ -6,7 +6,7 @@ import "gorm.io/gorm"
 type User struct {
 	gorm.Model
 	Name         string `gorm:"type:varchar(7);not null" json:"name"`
-	Account      string `gorm:"type:varchar(11);not null;unique" json:"account"`
+	Mobile       string `gorm:"type:varchar(11);not null;unique" json:"mobile"`
 	Password     string `gorm:"type:varchar(11);not null" json:"password"`
 	Avatar       string `gorm:"type:varchar(20);" json:"avatar"` // 用户头像地址
 	Sex          string `gorm:"type:varchar(1)" json:"sex"`
@@ -16,7 +16,7 @@ type User struct {
 	Introduction string `gorm:"type:varchar(30)" json:"introduction"` // 个人简介
 }
 
-func (User) TableName() string {
+func (u User) TableName() string {
 	return "users"
 }
 

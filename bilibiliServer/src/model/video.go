@@ -11,10 +11,11 @@ type Video struct {
 	Cover        string `gorm:"type:varchar(20)" json:"cover"`         // 视频封面
 	Likes        uint   `json:"likes"`                                 // 视频获赞数
 	Dislikes     uint   `json:"dislikes"`                              // 视频被踩数
+	Comments     uint   `json:"comments"`                              //评论数
 	FromId       uint   `json:"fromid"`                                // 发布者 id
 }
 
-func (Video) TableName() string {
+func (v Video) TableName() string {
 	return "videos"
 }
 
@@ -26,6 +27,6 @@ type VideoLike struct {
 	LikeStatus int  `json:"likestatus"`
 }
 
-func (VideoLike) TableName() string {
+func (v VideoLike) TableName() string {
 	return "videolikes"
 }

@@ -16,13 +16,30 @@
         @filedInput="res => (model.name = res)"
       ></inputField>
       <inputField
-        label="帐号"
-        placeholder="请输入6-11纯位数字"
+        label="手机号"
+        placeholder="请输入您的手机号"
         type="text"
         maxlength="11"
-        @filedInput="res => (model.account = res)"
+        @filedInput="res => (model.mobile = res)"
       >
       </inputField>
+      <van-field
+        v-model="smsCode"
+        center
+        clearable
+        label="短信验证码"
+        placeholder="请输入短信验证码"
+      >
+        <template #button>
+          <van-button
+            size="small"
+            color="#ff9db5"
+            type="primary"
+            @click="sendSms"
+            :text="sms_interval"
+          ></van-button>
+        </template>
+      </van-field>
       <inputField
         label="密码"
         placeholder="请输入6-11位，可含有数字字母_-）"
@@ -54,20 +71,22 @@ export default {
     return {
       model: {
         name: "",
-        account: "",
+        mobile: "",
         password: "",
       },
+      smsCode: "",
+      sms_interval: "发送验证码",
     };
   },
   methods: {
     confirmRegister() {
       // 简单正则校验用户输入
       if (!/^[^ ]{2,7}$/.test(this.model.name)) {
-        this.$msg.fail("昵称不规范");
-      } else if (!/^[0-9]{6,11}$/.test(this.model.account)) {
-        this.$msg.fail("用户名不规范");
+        this.$msg.fail("请输入规范的用户名");
+      } else if (!/^1[0-9]{10}$/.test(this.model.mobile)) {
+        this.$msg.fail("请输入正确的手机号");
       } else if (!/^[a-zA-Z0-9_-]{6,11}$/.test(this.model.password)) {
-        this.$msg.fail("密码不规范");
+        this.$msg.fail("请输入规范的密码");
       } else {
         // 弹出加载框等待服务端回应
         var loading = this.$msg.loading({
@@ -80,8 +99,9 @@ export default {
           url: "/api/user/register",
           data: {
             name: this.model.name,
-            account: this.model.account,
+            mobile: this.model.mobile,
             password: this.model.password,
+            smsCode: this.smsCode,
           },
           type: "json",
         })
@@ -100,6 +120,41 @@ export default {
           })
           .catch((err) => {
             loading.clear();
+            this.$msg.fail(err.response.data["msg"]);
+          });
+      }
+    },
+    sendSms() {
+      if (!/^1[0-9]{10}$/.test(this.model.mobile)) {
+        this.$msg.fail("请输入正确的手机号");
+      } else if (this.sms_interval != "发送验证码") {
+        this.$msg.fail("该功能正在冷却中");
+      } else {
+        this.sms_interval = 60;
+        var smsIn;
+        smsIn = setInterval(() => {
+          this.sms_interval -= 1;
+          if (this.sms_interval == 0) {
+            this.sms_interval = "发送验证码";
+            clearInterval(smsIn);
+          }
+        }, 1000);
+        this.$request({
+          methods: "post",
+          url: "/api/snedSMS",
+          data: {
+            mobile: this.model.mobile,
+          },
+          type: "json",
+        })
+          .then((res) => {
+            if (res.status == 200) {
+              this.$msg.success(res.data["msg"]);
+            } else {
+              this.$msg.fail(res.data["msg"]);
+            }
+          })
+          .catch((err) => {
             this.$msg.fail(err.response.data["msg"]);
           });
       }

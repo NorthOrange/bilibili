@@ -17,7 +17,7 @@
 | 字段     | 类型   | 说明                       | 是否必选 |
 | -------- | ------ | -------------------------- | :------: |
 | name     | string | 用户名, 2~7位字符          |    y     |
-| account  | string | 帐号, 6~11位纯数字         |    y     |
+| mobile   | string | 手机号                     |    y     |
 | password | string | 密码, 6~11位字母数字下划线 |    y     |
 
 ###### 成功返回: application/json
@@ -34,7 +34,7 @@
 ###### 请求参数: application/json
 | 字段     | 类型   | 说明                       | 是否必选 |
 | -------- | ------ | -------------------------- | :------: |
-| account  | string | 帐号, 6~11位纯数字         |    y     |
+| mobile   | string | 手机号                     |    y     |
 | password | string | 密码, 6~11位字母数字下划线 |    y     |
 |          |
 ###### 成功返回: application/json
@@ -53,7 +53,7 @@
 | 字段         | 类型   | 说明           |
 | ------------ | ------ | -------------- |
 | id           | uint   | 用户id         |
-| account      | string | 用户帐号       |
+| mobile       | string | 用户手机号     |
 | name         | string | 用户昵称       |
 | introduction | string | 用户个人简介   |
 | avatar       | string | 用户头像       |

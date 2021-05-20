@@ -73,7 +73,15 @@
           ></i>
           {{ model.dislike  + isDislike}}
         </span>
+        <span>
+          <i
+            class="fa fa-commenting-o"
+            aria-hidden="true"
+          ></i>
+          {{ model.comments }}
+        </span>
       </span>
+
     </div>
   </div>
 </template>
@@ -81,6 +89,7 @@
 <script>
 import "font-awesome/css/font-awesome.min.css";
 export default {
+  props: ["videoid"],
   data() {
     return {
       model: {},
@@ -93,9 +102,15 @@ export default {
   },
   created() {
     // 获取视频信息
+    var req_url;
+    if (this.videoid != 0) {
+      req_url = "/api/video/" + this.videoid;
+    } else {
+      req_url = "/api/video/get";
+    }
     this.$request({
       methods: "get",
-      url: "/api/video/get",
+      url: req_url,
     }).then((response) => {
       this.model = response.data;
       this.$request({

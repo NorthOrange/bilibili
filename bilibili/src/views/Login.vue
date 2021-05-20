@@ -9,11 +9,11 @@
     </div>
     <div class="login_box">
       <inputField
-        label="帐号"
-        placeholder="请输入6-11纯位数字"
+        label="手机号"
+        placeholder="请输入您的手机号"
         type="text"
         maxlength="11"
-        @filedInput="(res) => (model.account = res)"
+        @filedInput="(res) => (model.mobile = res)"
       >
       </inputField>
       <inputField
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       model: {
-        account: "",
+        mobile: "",
         password: "",
       },
     };
@@ -53,8 +53,8 @@ export default {
   methods: {
     confirmLogin() {
       // 简单正则校验用户输入
-      if (!/^[0-9]{6,11}$/.test(this.model.account)) {
-        this.$msg.fail("帐号不规范");
+      if (!/^1[0-9]{10}$/.test(this.model.mobile)) {
+        this.$msg.fail("请输入正确的手机号");
       } else if (!/^[a-zA-Z0-9-_]{6,11}$/.test(this.model.password)) {
         this.$msg.fail("密码不规范");
       } else {
@@ -68,7 +68,7 @@ export default {
           methods: "post",
           url: "/api/user/login",
           data: {
-            account: this.model.account,
+            mobile: this.model.mobile,
             password: this.model.password,
           },
           type: "json",

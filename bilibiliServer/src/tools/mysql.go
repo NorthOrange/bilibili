@@ -23,6 +23,7 @@ func InitDb() error {
 	Db.AutoMigrate(&model.Video{})
 	Db.AutoMigrate(&model.UserFollow{})
 	Db.AutoMigrate(&model.VideoLike{})
+	Db.AutoMigrate(&model.Sms_record{})
 	return nil
 }
 
