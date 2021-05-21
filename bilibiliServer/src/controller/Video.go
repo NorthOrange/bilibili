@@ -68,3 +68,11 @@ func VideoListGet(c *gin.Context) { // 查询用户发布的视频列表, 返回
 	}
 	c.JSON(200, gin.H{"namelist": videoName, "coverlist": videoCover, "idlist": idlist})
 }
+
+func VideoComment(c *gin.Context) { // 评论视频
+	var comment model.Comment
+	c.BindJSON(&comment)
+	db := tools.GetDb()
+	db.Create(comment)
+	c.JSON(200, gin.H{"msg": "评论成功"})
+}

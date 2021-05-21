@@ -57,6 +57,8 @@ func Register(c *gin.Context) { // 用户注册控制
 			c.JSON(400, gin.H{"msg": "验证码错误!"})
 			return
 		}
+		sms_record.Status = 1
+		db.Save(&sms_record)
 		db.Create(&user)
 		token := tools.GetToken(strconv.Itoa(int(user.ID))) //  给注册成功的用户返回 token 和 id
 		c.JSON(200, gin.H{"msg": "注册成功~", "id": user.ID, "token": token})

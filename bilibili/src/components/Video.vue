@@ -73,7 +73,7 @@
           ></i>
           {{ model.dislike  + isDislike}}
         </span>
-        <span>
+        <span @click="videoInfo">
           <i
             class="fa fa-commenting-o"
             aria-hidden="true"
@@ -104,7 +104,7 @@ export default {
     // 获取视频信息
     var req_url;
     if (this.videoid != 0) {
-      req_url = "/api/video/" + this.videoid;
+      req_url = "/api/video/info/" + this.videoid;
     } else {
       req_url = "/api/video/get";
     }
@@ -132,6 +132,9 @@ export default {
   methods: {
     goUserInfo() {
       this.$router.push("/user/info/" + this.model.fromid);
+    },
+    videoInfo() {
+      this.$router.push("/video/info/" + this.model.id);
     },
     play(event) {
       // 点击播放视频, 将对象传出去
