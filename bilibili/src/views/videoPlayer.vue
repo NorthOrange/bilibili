@@ -1,5 +1,8 @@
 <template>
   <div class="videoplayer">
+    <div class="top-bar">
+      <span @click="gotoHome">返回</span>
+    </div>
     <Video
       :videoid="videoid"
       @play="play($event)"
@@ -16,8 +19,13 @@ export default {
       videoid: this.$route.params.id,
     };
   },
+  methods: {
+    gotoHome() {
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 </style>
